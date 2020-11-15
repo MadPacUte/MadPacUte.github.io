@@ -1,0 +1,102 @@
+---
+title: "Historical"
+author: "Randall Madsen"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+#Load packages
+
+if(!require(pacman)) install.packages("pacman")
+pacman::p_load(tidyverse, lubridate, readxl, janitor, plotly, reactable, DT, scales, fflr, ffplot)
+
+#Set theme for better viz
+theme_set(theme_light())
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+options(lid = 85055)
+
+league_info()
+league_members()
+league_messages()
+league_name()
+league_size()
+league_status()
+league_teams()
+
+
+weekly_historical <- 
+fflr::week_scores(old = T) %>% 
+  bind_rows(week_scores(old = F)) %>%
+  select(-home) %>%
+  rename(name = abbrev) %>%
+  relocate(name) %>%
+  janitor::clean_names(., "upper_camel") %>%
+  arrange(Year, Week)
+
+
+yearly_historical <- 
+fflr::score_summary(old = T) %>% 
+  bind_rows(score_summary(old = F)) %>% 
+  # filter(year == 2019) %>% 
+  select(name = abbrev, year, final, wins, losses) %>% 
+  filter(!year == 2020) %>%
+  mutate(name = toupper(name)) %>% 
+  group_by(name) %>% 
+  mutate(win_total = sum(wins),
+         loss_total = sum(losses),
+         win_percentage = round(win_total / (win_total + loss_total), 2)) %>% 
+  ungroup() %>% 
+  arrange(final) %>%
+  janitor::clean_names(., "upper_camel") %>%
+  arrange(Year, Final)
+
+
+```
+
+
+### Weekly Historical
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+datatable(
+weekly_historical, options = list(dom = "Bfrtip", buttons = c('copy', 'csv'),
+                                                        keys = TRUE,
+                                                        deferRender = TRUE,  
+                                                        scrollY = 200, 
+                                                        scroller = TRUE), 
+extensions = c('Buttons', 'KeyTable', 'Scroller'))
+
+```
+
+
+### Yearly Historical
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+datatable(
+yearly_historical, options = list(dom = "Bfrtip", buttons = c('copy', 'csv'),
+                                                        keys = TRUE,
+                                                        deferRender = TRUE,  
+                                                        scrollY = 200, 
+                                                        scroller = TRUE), 
+extensions = c('Buttons', 'KeyTable', 'Scroller')) %>% 
+  formatPercentage(round(c(8)), 1)
+
+```

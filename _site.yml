@@ -1,0 +1,15 @@
+name: "The Sauce"
+navbar:
+  title: "The Sauce"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Average Score"
+      href: The_Sauce_GH.html
+    - text: "Power Rankings"
+      href: power_rankings.html
+    - text: "Historical"
+      href: historical.html
+output:
+  html_document:
+    theme: cosmo
