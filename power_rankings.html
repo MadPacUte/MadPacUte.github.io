@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Randall Madsen" />
+
+<meta name="date" content="2020-11-14" />
+
+<title>Power Rankings</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">The Sauce</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="The_Sauce_GH.html">Average Score</a>
+</li>
+<li>
+  <a href="power_rankings.html">Power Rankings</a>
+</li>
+<li>
+  <a href="historical.html">Historical</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Power Rankings</h1>
+<h4 class="author">Randall Madsen</h4>
+<h4 class="date">11/14/2020</h4>
+
+</div>
+
+
+<div id="htmlwidget-ad2bb2623bc9c8537c94" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ad2bb2623bc9c8537c94">{"x":{"data":[{"x":[1,2,3,4,5,6,7,8,9],"y":[10,8,9,9,6,3,10,8,10],"text":["Name: Mike<br />Week: 1<br />Power: 10<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 2<br />Power: 8<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 3<br />Power: 9<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 4<br />Power: 9<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 5<br />Power: 6<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 6<br />Power: 3<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 7<br />Power: 10<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 8<br />Power: 8<br />Avg Power: 8.1<br />","Name: Mike<br />Week: 9<br />Power: 10<br />Avg Power: 8.1<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Mike","legendgroup":"Mike","showlegend":true,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[2,10,5,11,3,0,8,5,9],"text":["Name: LM<br />Week: 1<br />Power: 2<br />Avg Power: 5.9<br />","Name: LM<br />Week: 2<br />Power: 10<br />Avg Power: 5.9<br />","Name: LM<br />Week: 3<br />Power: 5<br />Avg Power: 5.9<br />","Name: LM<br />Week: 4<br />Power: 11<br />Avg Power: 5.9<br />","Name: LM<br />Week: 5<br />Power: 3<br />Avg Power: 5.9<br />","Name: LM<br />Week: 6<br />Power: 0<br />Avg Power: 5.9<br />","Name: LM<br />Week: 7<br />Power: 8<br />Avg Power: 5.9<br />","Name: LM<br />Week: 8<br />Power: 5<br />Avg Power: 5.9<br />","Name: LM<br />Week: 9<br />Power: 9<br />Avg Power: 5.9<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(222,140,0,1)","dash":"solid"},"hoveron":"points","name":"LM","legendgroup":"LM","showlegend":true,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[0,1,7,5,4,7,3,3,3],"text":["Name: MIP<br />Week: 1<br />Power: 0<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 2<br />Power: 1<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 3<br />Power: 7<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 4<br />Power: 5<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 5<br />Power: 4<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 6<br />Power: 7<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 7<br />Power: 3<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 8<br />Power: 3<br />Avg Power: 3.7<br />","Name: MIP<br />Week: 9<br />Power: 3<br />Avg Power: 3.7<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(183,159,0,1)","dash":"solid"},"hoveron":"points","name":"MIP","legendgroup":"MIP","showlegend":true,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[11,11,10,2,7,9,11,9,4],"text":["Name: JOE<br />Week: 1<br />Power: 11<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 2<br />Power: 11<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 3<br />Power: 10<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 4<br />Power: 2<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 5<br />Power: 7<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 6<br />Power: 9<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 7<br />Power: 11<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 8<br />Power: 9<br />Avg Power: 8.2<br />","Name: JOE<br />Week: 9<br />Power: 4<br />Avg Power: 8.2<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(124,174,0,1)","dash":"solid"},"hoveron":"points","name":"JOE","legendgroup":"JOE","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[5,4,4,4,11,6,2,2,5],"text":["Name: KC<br />Week: 1<br />Power: 5<br />Avg Power: 4.8<br />","Name: KC<br />Week: 2<br />Power: 4<br />Avg Power: 4.8<br />","Name: KC<br />Week: 3<br />Power: 4<br />Avg Power: 4.8<br />","Name: KC<br />Week: 4<br />Power: 4<br />Avg Power: 4.8<br />","Name: KC<br />Week: 5<br />Power: 11<br />Avg Power: 4.8<br />","Name: KC<br />Week: 6<br />Power: 6<br />Avg Power: 4.8<br />","Name: KC<br />Week: 7<br />Power: 2<br />Avg Power: 4.8<br />","Name: KC<br />Week: 8<br />Power: 2<br />Avg Power: 4.8<br />","Name: KC<br />Week: 9<br />Power: 5<br />Avg Power: 4.8<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(0,186,56,1)","dash":"solid"},"hoveron":"points","name":"KC","legendgroup":"KC","showlegend":true,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[3,4,2,10,8,2,0,4,8],"text":["Name: MELO<br />Week: 1<br />Power: 3<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 2<br />Power: 4<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 3<br />Power: 2<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 4<br />Power: 10<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 5<br />Power: 8<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 6<br />Power: 2<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 7<br />Power: 0<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 8<br />Power: 4<br />Avg Power: 4.6<br />","Name: MELO<br />Week: 9<br />Power: 8<br />Avg Power: 4.6<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(0,192,139,1)","dash":"solid"},"hoveron":"points","name":"MELO","legendgroup":"MELO","showlegend":true,"xaxis":"x4","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[9,9,6,1,9,10,6,0,6],"text":["Name: JJP<br />Week: 1<br />Power: 9<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 2<br />Power: 9<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 3<br />Power: 6<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 4<br />Power: 1<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 5<br />Power: 9<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 6<br />Power: 10<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 7<br />Power: 6<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 8<br />Power: 0<br />Avg Power: 6.2<br />","Name: JJP<br />Week: 9<br />Power: 6<br />Avg Power: 6.2<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(0,191,196,1)","dash":"solid"},"hoveron":"points","name":"JJP","legendgroup":"JJP","showlegend":true,"xaxis":"x4","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[4,0,1,8,5,11,7,1,0],"text":["Name: Dom<br />Week: 1<br />Power: 4<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 2<br />Power: 0<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 3<br />Power: 1<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 4<br />Power: 8<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 5<br />Power: 5<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 6<br />Power: 11<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 7<br />Power: 7<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 8<br />Power: 1<br />Avg Power: 4.1<br />","Name: Dom<br />Week: 9<br />Power: 0<br />Avg Power: 4.1<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(0,180,240,1)","dash":"solid"},"hoveron":"points","name":"Dom","legendgroup":"Dom","showlegend":true,"xaxis":"x2","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[6,2,11,0,10,5,9,11,7],"text":["Name: Mad<br />Week: 1<br />Power: 6<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 2<br />Power: 2<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 3<br />Power: 11<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 4<br />Power: 0<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 5<br />Power: 10<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 6<br />Power: 5<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 7<br />Power: 9<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 8<br />Power: 11<br />Avg Power: 6.8<br />","Name: Mad<br />Week: 9<br />Power: 7<br />Avg Power: 6.8<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(97,156,255,1)","dash":"solid"},"hoveron":"points","name":"Mad","legendgroup":"Mad","showlegend":true,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[1,3,0,7,2,1,5,10,2],"text":["Name: cv<br />Week: 1<br />Power: 1<br />Avg Power: 3.4<br />","Name: cv<br />Week: 2<br />Power: 3<br />Avg Power: 3.4<br />","Name: cv<br />Week: 3<br />Power: 0<br />Avg Power: 3.4<br />","Name: cv<br />Week: 4<br />Power: 7<br />Avg Power: 3.4<br />","Name: cv<br />Week: 5<br />Power: 2<br />Avg Power: 3.4<br />","Name: cv<br />Week: 6<br />Power: 1<br />Avg Power: 3.4<br />","Name: cv<br />Week: 7<br />Power: 5<br />Avg Power: 3.4<br />","Name: cv<br />Week: 8<br />Power: 10<br />Avg Power: 3.4<br />","Name: cv<br />Week: 9<br />Power: 2<br />Avg Power: 3.4<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(199,124,255,1)","dash":"solid"},"hoveron":"points","name":"cv","legendgroup":"cv","showlegend":true,"xaxis":"x4","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[7,6,3,6,0,8,1,7,1],"text":["Name: D$ <br />Week: 1<br />Power: 7<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 2<br />Power: 6<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 3<br />Power: 3<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 4<br />Power: 6<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 5<br />Power: 0<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 6<br />Power: 8<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 7<br />Power: 1<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 8<br />Power: 7<br />Avg Power: 4.3<br />","Name: D$ <br />Week: 9<br />Power: 1<br />Avg Power: 4.3<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(245,100,227,1)","dash":"solid"},"hoveron":"points","name":"D$ ","legendgroup":"D$ ","showlegend":true,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9],"y":[8,7,8,3,1,4,4,6,11],"text":["Name: EDWN<br />Week: 1<br />Power: 8<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 2<br />Power: 7<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 3<br />Power: 8<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 4<br />Power: 3<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 5<br />Power: 1<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 6<br />Power: 4<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 7<br />Power: 4<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 8<br />Power: 6<br />Avg Power: 5.8<br />","Name: EDWN<br />Week: 9<br />Power: 11<br />Avg Power: 5.8<br />"],"type":"scatter","mode":"lines","line":{"width":7.55905511811024,"color":"rgba(255,100,176,1)","dash":"solid"},"hoveron":"points","name":"EDWN","legendgroup":"EDWN","showlegend":true,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2,8.2],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1,8.1],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8,6.8],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x4","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9,5.9],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8,5.8],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x4","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x2","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6],"y":[3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x4","yaxis":"y3","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":37.9178082191781,"r":7.30593607305936,"b":25.5707762557078,"l":16.8036529680365},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,0.245923026744945],"automargin":true,"type":"linear","autorange":false,"range":[0.4,9.6],"tickmode":"array","ticktext":["1","2","3","4","5","6","7","8","9"],"tickvals":[1,2,3,4,5,6,7,8,9],"categoryorder":"array","categoryarray":["1","2","3","4","5","6","7","8","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y3","title":"","hoverformat":".2f"},"yaxis":{"domain":[0.681506849315069,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.55,11.55],"tickmode":"array","ticktext":["0","3","6","9"],"tickvals":[0,3,6,9],"categoryorder":"array","categoryarray":["0","3","6","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.245923026744945,"y0":0.681506849315069,"y1":1},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.245923026744945,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.254076973255055,"x1":0.495923026744945,"y0":0.681506849315069,"y1":1},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.254076973255055,"x1":0.495923026744945,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.504076973255055,"x1":0.745923026744945,"y0":0.681506849315069,"y1":1},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.504076973255055,"x1":0.745923026744945,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.754076973255055,"x1":1,"y0":0.681506849315069,"y1":1},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.754076973255055,"x1":1,"y0":0,"y1":23.37899543379,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.245923026744945,"y0":0.348173515981735,"y1":0.651826484018265},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.245923026744945,"y0":0,"y1":23.37899543379,"yanchor":0.651826484018265,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.254076973255055,"x1":0.495923026744945,"y0":0.348173515981735,"y1":0.651826484018265},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.254076973255055,"x1":0.495923026744945,"y0":0,"y1":23.37899543379,"yanchor":0.651826484018265,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.504076973255055,"x1":0.745923026744945,"y0":0.348173515981735,"y1":0.651826484018265},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.504076973255055,"x1":0.745923026744945,"y0":0,"y1":23.37899543379,"yanchor":0.651826484018265,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.754076973255055,"x1":1,"y0":0.348173515981735,"y1":0.651826484018265},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.754076973255055,"x1":1,"y0":0,"y1":23.37899543379,"yanchor":0.651826484018265,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.245923026744945,"y0":0,"y1":0.318493150684932},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.245923026744945,"y0":0,"y1":23.37899543379,"yanchor":0.318493150684932,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.254076973255055,"x1":0.495923026744945,"y0":0,"y1":0.318493150684932},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.254076973255055,"x1":0.495923026744945,"y0":0,"y1":23.37899543379,"yanchor":0.318493150684932,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.504076973255055,"x1":0.745923026744945,"y0":0,"y1":0.318493150684932},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.504076973255055,"x1":0.745923026744945,"y0":0,"y1":23.37899543379,"yanchor":0.318493150684932,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.754076973255055,"x1":1,"y0":0,"y1":0.318493150684932},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.754076973255055,"x1":1,"y0":0,"y1":23.37899543379,"yanchor":0.318493150684932,"ysizemode":"pixel"}],"annotations":[{"text":"JOE","x":0.122961513372472,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Mike","x":0.375,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Mad","x":0.625,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"JJP","x":0.877038486627528,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"LM","x":0.122961513372472,"y":0.651826484018265,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"EDWN","x":0.375,"y":0.651826484018265,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"KC","x":0.625,"y":0.651826484018265,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"MELO","x":0.877038486627528,"y":0.651826484018265,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"D$ ","x":0.122961513372472,"y":0.318493150684932,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Dom","x":0.375,"y":0.318493150684932,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"MIP","x":0.625,"y":0.318493150684932,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"cv","x":0.877038486627528,"y":0.318493150684932,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":11.689497716895},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"xaxis2":{"type":"linear","autorange":false,"range":[0.4,9.6],"tickmode":"array","ticktext":["1","2","3","4","5","6","7","8","9"],"tickvals":[1,2,3,4,5,6,7,8,9],"categoryorder":"array","categoryarray":["1","2","3","4","5","6","7","8","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.254076973255055,0.495923026744945],"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y3","title":"","hoverformat":".2f"},"xaxis3":{"type":"linear","autorange":false,"range":[0.4,9.6],"tickmode":"array","ticktext":["1","2","3","4","5","6","7","8","9"],"tickvals":[1,2,3,4,5,6,7,8,9],"categoryorder":"array","categoryarray":["1","2","3","4","5","6","7","8","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.504076973255055,0.745923026744945],"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y3","title":"","hoverformat":".2f"},"xaxis4":{"type":"linear","autorange":false,"range":[0.4,9.6],"tickmode":"array","ticktext":["1","2","3","4","5","6","7","8","9"],"tickvals":[1,2,3,4,5,6,7,8,9],"categoryorder":"array","categoryarray":["1","2","3","4","5","6","7","8","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.754076973255055,1],"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y3","title":"","hoverformat":".2f"},"yaxis2":{"type":"linear","autorange":false,"range":[-0.55,11.55],"tickmode":"array","ticktext":["0","3","6","9"],"tickvals":[0,3,6,9],"categoryorder":"array","categoryarray":["0","3","6","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.348173515981735,0.651826484018265],"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"yaxis3":{"type":"linear","autorange":false,"range":[-0.55,11.55],"tickmode":"array","ticktext":["0","3","6","9"],"tickvals":[0,3,6,9],"categoryorder":"array","categoryarray":["0","3","6","9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0,0.318493150684932],"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"1c4c32e1636f":{"x":{},"y":{},"colour":{},"text":{},"type":"scatter"},"1c4c3e3b16d9":{"yintercept":{}}},"cur_data":"1c4c32e1636f","visdat":{"1c4c32e1636f":["function (y) ","x"],"1c4c3e3b16d9":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
