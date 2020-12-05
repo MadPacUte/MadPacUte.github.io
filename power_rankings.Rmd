@@ -1,7 +1,7 @@
 ---
 title: "Power Rankings"
 author: "Randall Madsen"
-date: "11/14/2020"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output: html_document
 ---
 

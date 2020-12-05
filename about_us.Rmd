@@ -1,0 +1,126 @@
+---
+title: "About Us"
+author: "Randall Madsen"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# About Us
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+source("utils.R")
+
+# Casey Walter
+# Cesar Vieira
+# Damien Thomas
+# Dan Fillat
+# Dominic Krohn
+# Edwin Castro
+# Jordan Proctor
+# Jose Zavalza
+# Marc Krohn
+# Michael Gonzalez
+# Randall Madsen
+# Tate Graham
+```
+
+
+
+
+## Casey Walter
+
+```{r kc, echo=FALSE, fig.cap="Casey", out.width = '40%'}
+knitr::include_graphics("KC.png")
+```
+
+
+
+## Dan Fillat
+
+```{r lm, echo=FALSE, fig.cap="Dan", out.width = '40%'}
+knitr::include_graphics("LM.png")
+```
+
+
+
+## Cesar Vieira
+
+```{r CV, echo=FALSE, fig.cap="Cesar", out.width = '40%'}
+knitr::include_graphics("CV.png")
+```
+
+
+
+## Damien Thomas
+
+```{r D$ , echo=FALSE, fig.cap="Damien", out.width = '40%'}
+knitr::include_graphics("D$.png")
+```
+
+
+
+## Dominic Krohn
+
+```{r DOM, echo=FALSE, fig.cap="Dominic", out.width = '40%'}
+knitr::include_graphics("DOM.png")
+```
+
+
+
+## Edwin Castro
+
+```{r EDWN, echo=FALSE, fig.cap="Edwin", out.width = '40%'}
+knitr::include_graphics("EDWN.png")
+```
+
+
+
+## Jordan Proctor
+
+```{r JP, echo=FALSE, fig.cap="Jordan", out.width = '40%'}
+knitr::include_graphics("JP.png")
+```
+
+
+
+## Jose Zavala
+
+```{r JOE, echo=FALSE, fig.cap="Jose", out.width = '40%'}
+knitr::include_graphics("JOE.png")
+```
+
+
+
+## Marc Krohn
+
+```{r MELO, echo=FALSE, fig.cap="Marc", out.width = '40%'}
+knitr::include_graphics("MELO.png")
+```
+
+
+
+## Michael Gonzalez
+
+```{r Mike, echo=FALSE, fig.cap="Michael", out.width = '40%'}
+knitr::include_graphics("MIKE.png")
+```
+
+
+
+## Randall Madsen
+
+```{r Randall, echo=FALSE, fig.cap="Randall", out.width = '40%'}
+knitr::include_graphics("MAD.png")
+```
+
+
+
+## Tate Graham
+
+```{r Tate, echo=FALSE, fig.cap="Tate", out.width = '40%'}
+knitr::include_graphics("MIP.png")
+```

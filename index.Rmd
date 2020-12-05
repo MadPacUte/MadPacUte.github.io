@@ -2,12 +2,30 @@
 title: "The Sauce"
 ---
 
-Welcome to The Sauce FF site! 
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+source("utils.R")
+```
 
-If you have any problems viewing the website, let me know.
+### Welcome to **The Sauce** FF site! [ESPN Link](https://fantasy.espn.com/football/league?leagueId=85055 "The Sauce Homepage")
 
-If you have any issues with the results, better luck next year!
+If you have any problems viewing the website, let me know. If you have any issues with the results, better luck next year!
+
+Here are the Draft rank vs Current rank:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, out.width = '100%'}
+
+slope_chart
+
+```
 
 
+```{r draft, echo=FALSE, fig.cap="Draft", out.width = '90%'}
+knitr::include_graphics("draft.png")
+```
+
+
+```{r ff pros, echo=FALSE, fig.cap="Fantasy Pros Rankings", out.width = '90%'}
+knitr::include_graphics("fantasy_pros.png")
+```
 
 Last updated: `r format(Sys.time(), '%Y-%B-%d')`
