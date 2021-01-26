@@ -1,0 +1,13 @@
+library(ggbernie)
+library(tidyverse)
+theme_set(theme_light())
+
+standings %>% 
+  mutate(name = fct_reorder(name, -seed)) %>% 
+  ggplot() +
+  geom_bernie(aes(seed, name)) +
+  labs(title = "End of Regular Season Standings",
+       subtitle = "Prior to playoffs",
+       x = "Rank",
+       y = "") +
+  scale_x_continuous(breaks = c(seq(1, 12)))
